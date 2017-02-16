@@ -1,0 +1,64 @@
+{% extends "detail/base.html" %}
+{% block content %}
+<div class="actions">
+  <form action="/call_detail/index/" method="POST" id='test'>
+    {% csrf_token %}
+    <!--<p><input name='col_num' size="10" placeholder="Кол-во строк"></p>-->
+    <input class="datetimepicker" name="picker1" id="dp1"/>
+    <input class="datetimepicker" name="picker2" id="dp2"/>
+    <p><input placeholder = "Номерз звонящего" name="src" class="form-control" style="width:180px;" id="src"></p>
+    <p><input placeholder = "Номер назначения" name="dst" class="form-control" style="width:180px;" id="dst"></p>
+    <div class="checkbox">
+      <label><input type="checkbox" value="1" name="ans">Отвечено</label>
+    </div>
+    <div class="checkbox">
+      <label><input type="checkbox" value="1" name="nans">Не отвечено</label>
+    </div>
+    <div class="checkbox">
+      <label><input type="checkbox" value="1" name="busy">Занято</label>
+    </div>
+
+    <select class="selectpicker" name="limit">
+      <option>25</option>
+      <option>50</option>
+      <option>100</option>
+      <option>1000</option>
+    </select>
+
+    <button type="submit" style="width: 100%;">OK</button>
+  </form>
+
+<div class="info">
+  <p>{{ message }}</p>
+</div>
+
+<div id="information">
+  <ol>
+      {% for p in fields %}
+        <li>{{ p.calldate|date:'Y-m-d H:m:s' }}   |   {{ p.src }}  | {{ p.dst }}  |  {{ p.billsec }}  |  {{ p.disposition }}</li>
+      {% empty %}
+        <p>За данный период времени не было сделано ни одного звонка</p>
+      {% endfor %}
+  </ol>
+</div>
+
+
+<input id="show_more" count_show="5" count_add="3" type="button" value="Показать еще" />
+
+
+
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+  $(document).ready(function () {
+      // create DateTimePicker from input HTML element
+      $(".datetimepicker").kendoDateTimePicker({
+          value:new Date(),
+          format: 'yyyy-MM-dd H:mm:ss'
+
+      });
+  });
+</script>
+{% endblock %}
